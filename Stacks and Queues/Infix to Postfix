@@ -1,0 +1,64 @@
+package Advanced;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+
+public class InfixТoPostfix {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] inputData = reader.readLine().trim().split("\\s+");
+
+        ArrayDeque<String> queueNumbers = new ArrayDeque<>();
+        ArrayDeque<String> stackOperators = new ArrayDeque<>();
+
+        for (String currentElement : inputData) {
+            if (Character.isLetterOrDigit(currentElement.charAt(0))) {
+                queueNumbers.offer(currentElement);
+            } else {
+                if (stackOperators.isEmpty()) {
+                    stackOperators.push(currentElement);
+                } else {
+                    String lastOperator = stackOperators.peek();
+                    switch (currentElement) {
+                        case "+":
+                        case "-":
+                            if (!lastOperator.equals("(")) {
+                                queueNumbers.offer(stackOperators.pop());
+                            }
+                            stackOperators.push(currentElement);
+                            break;
+                        case "*":
+                        case "/":
+                            if (lastOperator.equals("*") || lastOperator.equals("/")) {
+                                queueNumbers.offer(stackOperators.pop());
+                            }
+                            stackOperators.push(currentElement);
+                            break;
+                        case "(":
+                            stackOperators.push(currentElement);
+                            break;
+                        case ")":
+                            while (!stackOperators.peek().equals("(")) {
+                                queueNumbers.offer(stackOperators.pop());
+                            }
+                            stackOperators.pop();
+                            break;
+                    }
+                }
+            }
+        }
+
+        while (!queueNumbers.isEmpty()) {
+            System.out.print(queueNumbers.poll() + " ");
+        }
+
+        while (!stackOperators.isEmpty()) {
+            System.out.print(stackOperators.pop() + " ");
+        }
+    }
+
+}
