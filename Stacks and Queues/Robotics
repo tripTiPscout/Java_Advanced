@@ -1,0 +1,78 @@
+package Advanced;
+
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class Robotics {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] inputRobots = scanner.nextLine().split(";");
+        
+        String[] robots = new String[inputRobots.length];
+        int[] processTime = new int[inputRobots.length];
+        int[] workTime = new int[inputRobots.length];
+
+        for (int i = 0; i < inputRobots.length; i++) {
+            String[] robotData = inputRobots[i].split("-");
+            
+            String name = robotData[0];
+            int time = Integer.parseInt(robotData[1]);
+            
+            robots[i] = name;
+            processTime[i] = time;
+        }
+
+        String startTime = scanner.nextLine();
+
+        ArrayDeque<String> products = new ArrayDeque<>();
+
+        String inputProduct = scanner.nextLine();
+
+        while (!inputProduct.equals("End")) {
+            products.offer(inputProduct);
+
+            inputProduct = scanner.nextLine();
+        }
+
+        String[] timeData = startTime.split(":");
+        
+        int hours = Integer.parseInt(timeData[0]);
+        int minutes = Integer.parseInt(timeData[1]);
+        int seconds = Integer.parseInt(timeData[2]);
+
+        int timeInSeconds = hours * 3600 + minutes * 60 + seconds;
+
+        while (!products.isEmpty()) {
+            timeInSeconds++;
+
+            String product = products.poll();
+
+            boolean isWorking = false;
+            for (int i = 0; i < robots.length; i++) {
+                if (workTime[i] == 0 && !isWorking) {
+                    workTime[i] = processTime[i];
+                    isWorking = true;
+                    printRobotData(robots[i], product, timeInSeconds);
+                }
+                if (workTime[i] > 0) {
+                    workTime[i]--;
+                }
+            }
+
+            if (!isWorking) {
+                products.offer(product);
+            }
+        }
+
+    }
+
+    private static void printRobotData(String robot, String product, int beginSeconds) {
+        int seconds = beginSeconds % 60;
+        int minutes = (beginSeconds / 60) % 60;
+        int hours = (beginSeconds / (60 * 60)) % 24;
+        System.out.printf("%s - %s [%02d:%02d:%02d]\n", robot, product, hours, minutes, seconds);
+    }
+    
+}
