@@ -7,9 +7,9 @@ public class WrongMeasurements {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[][] matrix = readMatrix(scanner, "\\s+");
+        int[][] matrix = readMatrix(scanner);
 
-        int[] wrongValuePosition = readArray(scanner, "\\s+");
+        int[] wrongValuePosition = readArray(scanner);
 
         int wrongValueRow = wrongValuePosition[0];
         int wrongValueCol = wrongValuePosition[1];
@@ -34,7 +34,7 @@ public class WrongMeasurements {
 
     private static int calcCorrectValue(int[][] matrix, int row, int col, int wrongValue) {
         int correctValue = 0;
-        
+
         if (isInBounds(matrix, row - 1, col) && matrix[row - 1][col] != wrongValue) {
             correctValue += matrix[row - 1][col];
         }
@@ -47,7 +47,7 @@ public class WrongMeasurements {
         if (isInBounds(matrix, row, col + 1) && matrix[row][col + 1] != wrongValue) {
             correctValue += matrix[row][col + 1];
         }
-        
+
         return correctValue;
     }
 
@@ -56,28 +56,28 @@ public class WrongMeasurements {
     }
 
 
-    private static int[] readArray(Scanner scanner, String pattern) {
-        return Arrays.stream(scanner.nextLine().split(pattern))
+    private static int[] readArray(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split("\\s+"))
                 .mapToInt(Integer::parseInt)
                 .toArray();
     }
 
-    private static int[][] readMatrix(Scanner scanner, String pattern) {
+    private static int[][] readMatrix(Scanner scanner) {
         int rows = Integer.parseInt(scanner.nextLine());
 
         int[][] matrix = new int[rows][];
 
         for (int r = 0; r < rows; r++) {
-            matrix[r] = readArray(scanner, pattern);
+            matrix[r] = readArray(scanner);
         }
 
         return matrix;
     }
 
     private static void printMatrix(int[][] matrix) {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                System.out.print(matrix[row][col] + " ");
+        for (int[] row : matrix) {
+            for (int element : row) {
+                System.out.print(element + " ");
             }
             System.out.println();
         }
