@@ -1,0 +1,113 @@
+package Advanced;
+
+import java.util.*;
+
+public class FindTheRealQueen {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[][] board = readMatrix(scanner, " ");
+
+        boolean isRealQueen;
+
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                char symbol = board[row][col].charAt(0);
+                if (symbol == 'q') {
+                    isRealQueen = checkIsNotAttacked(board, row, col);
+                    if (isRealQueen) {
+                        System.out.println(row + " " + col);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean checkIsNotAttacked(String[][] board, int row, int col) {
+        if (checkHorizontal(board, row, col)) return false;
+
+        if (checkVertical(board, row, col)) return false;
+
+        if (checkFirstDiagonal(board, row, col)) return false;
+
+        if (checkSecondDiagonal(board, row, col)) return false;
+
+        return true;
+    }
+
+    private static boolean checkSecondDiagonal(String[][] board, int row, int col) {
+        int r = row;
+        int c = col;
+        while (r > 0 && c < 7) {
+            if (board[--r][++c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+
+        r = row;
+        c = col;
+        while (r < 7 && c > 0) {
+            if (board[++r][--c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkFirstDiagonal(String[][] board, int row, int col) {
+        int r = row;
+        int c = col;
+        while (r > 0 && c > 0) {
+            if (board[--r][--c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+
+        r = row;
+        c = col;
+        while (r < 7 && c < 7) {
+            if (board[++r][++c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkVertical(String[][] board, int row, int col) {
+        for (int r = 0; r < row; r++) {
+            if (board[r][col].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        for (int r = row + 1; r < 8; r++) {
+            if (board[r][col].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkHorizontal(String[][] board, int row, int col) {
+        for (int c = 0; c < col; c++) {
+            if (board[row][c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        for (int c = col + 1; c < 8; c++) {
+            if (board[row][c].charAt(0) == 'q') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String[][] readMatrix(Scanner scanner, String pattern) {
+        String[][] matrix = new String[8][8];
+        for (int r = 0; r < 8; r++) {
+            matrix[r] = scanner.nextLine().split(pattern);
+        }
+        return matrix;
+    }
+
+}
