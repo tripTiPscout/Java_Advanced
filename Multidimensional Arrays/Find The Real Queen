@@ -7,7 +7,7 @@ public class FindTheRealQueen {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[][] board = readMatrix(scanner, " ");
+        String[][] board = readMatrix(scanner);
 
         boolean isRealQueen;
 
@@ -102,10 +102,10 @@ public class FindTheRealQueen {
         return false;
     }
 
-    private static String[][] readMatrix(Scanner scanner, String pattern) {
+    private static String[][] readMatrix(Scanner scanner) {
         String[][] matrix = new String[8][8];
         for (int r = 0; r < 8; r++) {
-            matrix[r] = scanner.nextLine().split(pattern);
+            matrix[r] = scanner.nextLine().split(" ");
         }
         return matrix;
     }
