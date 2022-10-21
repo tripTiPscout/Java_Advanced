@@ -1,0 +1,86 @@
+package Advanced;
+
+import java.util.*;
+
+public class WrongMeasurements {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[][] matrix = readMatrix(scanner, "\\s+");
+
+        int[] wrongValuePosition = readArray(scanner, "\\s+");
+
+        int wrongValueRow = wrongValuePosition[0];
+        int wrongValueCol = wrongValuePosition[1];
+
+        int wrongValue = matrix[wrongValueRow][wrongValueCol];
+
+        int[][] correctMatrix = new int[matrix.length][matrix[0].length];
+
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                if (matrix[row][col] == wrongValue) {
+                    int correctValue = calcCorrectValue(matrix, row, col, wrongValue);
+                    correctMatrix[row][col] = correctValue;
+                } else {
+                    correctMatrix[row][col] = matrix[row][col];
+                }
+            }
+        }
+
+        printMatrix(correctMatrix);
+    }
+
+    private static int calcCorrectValue(int[][] matrix, int row, int col, int wrongValue) {
+        int correctValue = 0;
+        
+        if (isInBounds(matrix, row - 1, col) && matrix[row - 1][col] != wrongValue) {
+            correctValue += matrix[row - 1][col];
+        }
+        if (isInBounds(matrix, row + 1, col) && matrix[row + 1][col] != wrongValue) {
+            correctValue += matrix[row + 1][col];
+        }
+        if (isInBounds(matrix, row, col - 1) && matrix[row][col - 1] != wrongValue) {
+            correctValue += matrix[row][col - 1];
+        }
+        if (isInBounds(matrix, row, col + 1) && matrix[row][col + 1] != wrongValue) {
+            correctValue += matrix[row][col + 1];
+        }
+        
+        return correctValue;
+    }
+
+    private static boolean isInBounds(int[][] matrix, int row, int col) {
+        return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
+    }
+
+
+    private static int[] readArray(Scanner scanner, String pattern) {
+        return Arrays.stream(scanner.nextLine().split(pattern))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    private static int[][] readMatrix(Scanner scanner, String pattern) {
+        int rows = Integer.parseInt(scanner.nextLine());
+
+        int[][] matrix = new int[rows][];
+
+        for (int r = 0; r < rows; r++) {
+            matrix[r] = readArray(scanner, pattern);
+        }
+
+        return matrix;
+    }
+
+    private static void printMatrix(int[][] matrix) {
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}
