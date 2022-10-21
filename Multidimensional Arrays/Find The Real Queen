@@ -1,6 +1,6 @@
 package Advanced;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class FindTheRealQueen {
 
