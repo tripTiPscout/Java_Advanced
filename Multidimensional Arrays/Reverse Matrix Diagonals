@@ -1,35 +1,35 @@
 package Advanced;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class ReverseMatrixDiagonals {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[] dimensions = readArray(scanner, "\\s+");
+        int[] dimensions = readArray(scanner);
 
         int rows = dimensions[0];
         int cols = dimensions[1];
 
-        int[][] matrix = readMatrix(rows, cols, scanner, "\\s+");
+        int[][] matrix = readMatrix(rows, cols, scanner);
 
         printMatrixDiagonals(rows, cols, matrix);
 
     }
 
-    private static int[] readArray(Scanner scanner, String pattern) {
-        return Arrays.stream(scanner.nextLine().split(pattern))
+    private static int[] readArray(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split("\\s+"))
                 .mapToInt(Integer::parseInt)
                 .toArray();
     }
 
-    private static int[][] readMatrix(int rows, int cols, Scanner scanner, String pattern) {
-
+    private static int[][] readMatrix(int rows, int cols, Scanner scanner) {
         int[][] matrix = new int[rows][cols];
 
         for (int r = 0; r < rows; r++) {
-            matrix[r] = readArray(scanner, pattern);
+            matrix[r] = readArray(scanner);
         }
 
         return matrix;
