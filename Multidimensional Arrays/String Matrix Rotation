@@ -1,0 +1,76 @@
+package Advanced;
+
+import java.util.*;
+
+public class StringMatrixRotation {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String rotationCommand = scanner.nextLine();
+
+        List<String> elements = new ArrayList<>();
+
+        String input = scanner.nextLine();
+
+        while (!input.equals("END")) {
+            elements.add(input);
+            input = scanner.nextLine();
+        }
+
+        int row = elements.size();
+        int col = elements.stream().map(String::length).max(Integer::compareTo).get();
+
+        String[][] matrix = new String[row][col];
+
+        for (int r = 0; r < row; r++) {
+            String currentElement = elements.get(r);
+            for (int c = 0; c < currentElement.length(); c++) {
+                String currentSymbol = Character.toString(currentElement.charAt(c));
+                matrix[r][c] = currentSymbol;
+            }
+        }
+
+        int rotationDegrees = Integer.parseInt(rotationCommand.substring(rotationCommand.indexOf('(') + 1, rotationCommand.indexOf(')')));
+        int rotations = rotationDegrees / 90;
+
+        if (rotationDegrees == 0) {
+            printMatrix(matrix);
+        } else {
+            String[][] rotatedMatrix = rotateMatrix90DegreesRight(matrix);
+
+            for (int cycle = 1; cycle < rotations; cycle++) {
+                rotatedMatrix = rotateMatrix90DegreesRight(rotatedMatrix);
+            }
+            printMatrix(rotatedMatrix);
+        }
+    }
+
+    private static String[][] rotateMatrix90DegreesRight(String[][] matrix) {
+        int rows = matrix[0].length;
+        int cols = matrix.length;
+
+        String[][] rotatedMatrix = new String[rows][cols];
+
+        for (int r = 0; r < matrix.length; r++) {
+            for (int c = 0; c < matrix[0].length; c++) {
+                rotatedMatrix[c][(cols - 1) - r] = matrix[r][c];
+            }
+        }
+        return rotatedMatrix;
+    }
+
+    private static void printMatrix(String[][] matrix) {
+        for (String[] strings : matrix) {
+            for (String string : strings) {
+                if (string == null) {
+                    System.out.print(" ");
+                } else {
+                    System.out.print(string);
+                }
+            }
+            System.out.println();
+        }
+    }
+
+}
