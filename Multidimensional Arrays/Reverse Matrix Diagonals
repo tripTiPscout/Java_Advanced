@@ -1,0 +1,49 @@
+package Advanced;
+
+import java.util.*;
+
+public class ReverseMatrixDiagonals {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] dimensions = readArray(scanner, "\\s+");
+
+        int rows = dimensions[0];
+        int cols = dimensions[1];
+
+        int[][] matrix = readMatrix(rows, cols, scanner, "\\s+");
+
+        printMatrixDiagonals(rows, cols, matrix);
+
+    }
+
+    private static int[] readArray(Scanner scanner, String pattern) {
+        return Arrays.stream(scanner.nextLine().split(pattern))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    private static int[][] readMatrix(int rows, int cols, Scanner scanner, String pattern) {
+
+        int[][] matrix = new int[rows][cols];
+
+        for (int r = 0; r < rows; r++) {
+            matrix[r] = readArray(scanner, pattern);
+        }
+
+        return matrix;
+    }
+
+    private static void printMatrixDiagonals(int rows, int cols, int[][] matrix) {
+        for (int i = rows + cols - 1; i >= 0; i--) {
+            int x = i < cols ? 0 : i - cols + 1;
+            int y = i < rows ? 0 : i - rows + 1;
+            for (int j = i - y; j >= x; j--) {
+                System.out.print(matrix[j][i - j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}
