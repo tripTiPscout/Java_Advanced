@@ -1,6 +1,9 @@
 package Fundamentals;
  
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
  
 public class DragonArmy {
  
@@ -51,8 +54,6 @@ public class DragonArmy {
             System.out.printf("%s::(%.2f/%.2f/%.2f)\n", key, damageAvg, healthAvg, armorAvg);
             dragons.get(key).forEach((k, v) -> System.out.printf("-%s -> damage: %d, health: %d, armor: %d\n", k, v[0], v[1], v[2]));
         });
- 
     }
- 
+    
 }
- 
