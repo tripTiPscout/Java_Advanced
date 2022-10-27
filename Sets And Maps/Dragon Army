@@ -12,7 +12,7 @@ public class DragonArmy {
         Map<String, Map<String, int[]>> dragons = new LinkedHashMap<>();
  
         for (int i = 1; i <= lines; i++) {
-            String[] dragonData = scanner.nextLine().split(" ");
+            String[] dragonData = scanner.nextLine().split("\\s+");
  
             String type = dragonData[0];
             String name = dragonData[1];
