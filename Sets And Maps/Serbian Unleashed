@@ -1,0 +1,105 @@
+package Advanced;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class SerbianUnleashed {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Map<String, Integer>> venues = new LinkedHashMap<>();
+        
+        String command = scanner.nextLine();
+
+        while (!command.equals("End")) {
+            if (inputIsValid(command)) {
+                String[] inputData = extractData(command);
+
+                String singer = inputData[0];
+                String venue = inputData[1];
+
+                int ticketPrice = Integer.parseInt(inputData[2]);
+                int ticketsCount = Integer.parseInt(inputData[3]);
+                
+                int concertAmount = ticketPrice * ticketsCount;
+
+                if (!venues.containsKey(venue)) {
+                    
+                    Map<String, Integer> singers = new LinkedHashMap<>();
+                    
+                    singers.put(singer, concertAmount);
+                    venues.put(venue, singers);
+                    
+                } else if (!venues.get(venue).containsKey(singer)) {
+                    
+                    venues.get(venue).put(singer, concertAmount);
+                } else {
+                    
+                    venues.get(venue).put(singer, venues.get(venue).get(singer) + concertAmount);
+                }
+            }
+            command = scanner.nextLine();
+        }
+
+        venues.forEach((venue, singers) -> {
+            
+            System.out.println(venue);
+            
+            venues.get(venue)
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+                    .forEach(singer -> System.out.printf("#  %s -> %d%n", singer.getKey(), singer.getValue()));
+        });
+    }
+
+    private static String[] extractData(String command) {
+        String[] result = new String[4];
+
+        String[] tokens = command.split(" @");
+
+        String singer = tokens[0];
+        result[0] = singer;
+
+        String remainingData = tokens[1];
+        String[] remainingTokens = remainingData.split(" ");
+
+        if (remainingTokens.length == 3) {
+            
+            String venue = remainingTokens[0];
+            
+            result[1] = venue;
+            result[2] = remainingTokens[1];
+            result[3] = remainingTokens[2];
+            
+        } else {
+            StringBuilder venue = new StringBuilder();
+            
+            for (int i = 0; i < remainingTokens.length - 3; i++) {
+                venue.append(remainingTokens[i]).append(" ");
+            }
+            venue.append(remainingTokens[remainingTokens.length - 3]);
+            
+            result[1] = venue.toString();
+            result[2] = remainingTokens[remainingTokens.length - 2];
+            result[3] = remainingTokens[remainingTokens.length - 1];
+        }
+        return result;
+    }
+
+    private static boolean inputIsValid(String command) {
+        String[] tokens = command.split(" @");
+
+        if (tokens.length != 2) {
+            return false;
+        }
+
+        String remainingData = tokens[1];
+        String[] remainingTokens = remainingData.split(" ");
+
+        return remainingTokens.length >= 3;
+    }
+}
