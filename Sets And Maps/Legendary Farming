@@ -1,0 +1,90 @@
+package Advanced;
+
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+public class LegendaryFarming {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Integer> keyMaterials = new TreeMap<>();
+        Map<String, Integer> junkMaterials = new TreeMap<>();
+
+        keyMaterials.put("shards", 0);
+        keyMaterials.put("fragments", 0);
+        keyMaterials.put("motes", 0);
+
+        String obtainedItem = "";
+
+        while (obtainedItem.equals("")) {
+            String[] inputData = scanner.nextLine().toLowerCase().split("\\s+");
+
+            for (int i = 1; i < inputData.length; i += 2) {
+
+                String material = inputData[i];
+                int quantity = Integer.parseInt(inputData[i - 1]);
+                int currentQuantity;
+
+                if (material.equals("shards") || material.equals("fragments") || material.equals("motes")) {
+
+                    currentQuantity = keyMaterials.get(material);
+                    keyMaterials.put(material, currentQuantity + quantity);
+
+                    obtainedItem = obtainMaterial(keyMaterials, material);
+
+                    if (!obtainedItem.equals("")) {
+                        recalculatesObtainedMaterial(keyMaterials, material);
+                        break;
+                    }
+                    
+                } else {
+                    junkMaterials.putIfAbsent(material, 0);
+                    
+                    currentQuantity = junkMaterials.get(material);
+                    junkMaterials.put(material, currentQuantity + quantity);
+                }
+            }
+        }
+
+        System.out.printf("%s obtained!%n", obtainedItem);
+
+        keyMaterials
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed().thenComparing(Map.Entry.comparingByKey()))
+                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
+
+        junkMaterials
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
+    }
+
+    public static String obtainMaterial(Map<String, Integer> materials, String material) {
+        String obtainedMaterial = "";
+        if (materials.get(material) >= 250) {
+            switch (material) {
+                case "shards":
+                    obtainedMaterial = "Shadowmourne";
+                    break;
+                case "fragments":
+                    obtainedMaterial = "Valanyr";
+                    break;
+                case "motes":
+                    obtainedMaterial = "Dragonwrath";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return obtainedMaterial;
+    }
+
+    public static void recalculatesObtainedMaterial(Map<String, Integer> keyMaterials, String key) {
+        int newValue = keyMaterials.get(key) - 250;
+        keyMaterials.put(key, newValue);
+    }
+}
