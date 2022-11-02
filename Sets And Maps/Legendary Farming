@@ -16,6 +16,28 @@ public class LegendaryFarming {
         keyMaterials.put("fragments", 0);
         keyMaterials.put("motes", 0);
 
+        String obtainedItem = getObtainedItem(scanner, keyMaterials, junkMaterials);
+
+        printResults(keyMaterials, junkMaterials, obtainedItem);
+    }
+
+    private static void printResults(Map<String, Integer> keyMaterials, Map<String, Integer> junkMaterials, String obtainedItem) {
+        System.out.printf("%s obtained!%n", obtainedItem);
+
+        keyMaterials
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed().thenComparing(Map.Entry.comparingByKey()))
+                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
+
+        junkMaterials
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
+    }
+
+    private static String getObtainedItem(Scanner scanner, Map<String, Integer> keyMaterials, Map<String, Integer> junkMaterials) {
         String obtainedItem = "";
 
         while (obtainedItem.equals("")) {
@@ -38,29 +60,16 @@ public class LegendaryFarming {
                         recalculatesObtainedMaterial(keyMaterials, material);
                         break;
                     }
-                    
+
                 } else {
                     junkMaterials.putIfAbsent(material, 0);
-                    
+
                     currentQuantity = junkMaterials.get(material);
                     junkMaterials.put(material, currentQuantity + quantity);
                 }
             }
         }
-
-        System.out.printf("%s obtained!%n", obtainedItem);
-
-        keyMaterials
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed().thenComparing(Map.Entry.comparingByKey()))
-                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
-
-        junkMaterials
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(result -> System.out.printf("%s: %d%n", result.getKey(), result.getValue()));
+        return obtainedItem;
     }
 
     public static String obtainMaterial(Map<String, Integer> materials, String material) {
