@@ -1,0 +1,45 @@
+package Advanced;
+
+import java.util.*;
+
+public class CitiesByContinentAndCountry {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int lines = Integer.parseInt(scanner.nextLine());
+
+        Map<String, Map<String, List<String>>> continents = new LinkedHashMap<>();
+
+        for (int i = 1; i <= lines; i++) {
+            String[] input = scanner.nextLine().split("\\s+");
+            String continent = input[0];
+            String country = input[1];
+            String city = input[2];
+
+            Map<String, List<String>> countries = new LinkedHashMap<>();
+            List<String> cities = new ArrayList<>();
+
+            if (!continents.containsKey(continent)) {
+                cities.add(city);
+                countries.put(country, cities);
+                continents.put(continent, countries);
+            } else {
+                if (!continents.get(continent).containsKey(country)) {
+                    cities.add(city);
+                    continents.get(continent).put(country, cities);
+                } else {
+                    continents.get(continent).get(country).add(city);
+                }
+            }
+        }
+
+        continents.forEach((continent, countries) -> {
+            System.out.printf("%s:\n", continent);
+            countries.forEach((country, cities) -> {
+                System.out.printf("\t%s -> ", country);
+                System.out.println(cities.toString().replaceAll("[\\[\\]]",""));
+            });
+        });
+    }
+}
