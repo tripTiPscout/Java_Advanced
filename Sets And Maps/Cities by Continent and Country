@@ -1,6 +1,10 @@
 package Advanced;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class CitiesByContinentAndCountry {
 
@@ -13,6 +17,7 @@ public class CitiesByContinentAndCountry {
 
         for (int i = 1; i <= lines; i++) {
             String[] input = scanner.nextLine().split("\\s+");
+            
             String continent = input[0];
             String country = input[1];
             String city = input[2];
