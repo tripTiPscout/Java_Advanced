@@ -3,19 +3,22 @@ package Advanced;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 
-public class NestedFolders {
+public class Main {
+
+    public static int foldersCount = 0;
 
     public static void main(String[] args) {
 
         String inputPath = "C:/Users/User/Desktop";
 
-        File root = new File(inputPath);
+        File file = new File(inputPath);
+
+        //dfs(file);
 
         Deque<File> dirs = new ArrayDeque<>();
-        dirs.offer(root);
-
-        int count = 0;
+        dirs.offer(file);
 
         while (!dirs.isEmpty()) {
 
@@ -31,10 +34,22 @@ public class NestedFolders {
                     dirs.offer(nestedFile);
                 }
             }
-            count++;
+            foldersCount++;
 
             System.out.println(current.getName());
         }
-        System.out.println(count + " folders");
+        
+        System.out.println(foldersCount + " folders");
+    }
+
+    public static void dfs(File file) {
+        foldersCount++;
+
+        for (File f : Objects.requireNonNull(file.listFiles())) {
+            if (f.isDirectory()) {
+                dfs(f);
+            }
+        }
+        System.out.println(file.getName());
     }
 }
