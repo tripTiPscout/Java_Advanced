@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Main {
 
-    public static int foldersCount = 0;
+    public static int FOLDERS_COUNT = 0;
 
     public static void main(String[] args) {
 
@@ -34,22 +34,23 @@ public class Main {
                     dirs.offer(nestedFile);
                 }
             }
-            foldersCount++;
+            FOLDERS_COUNT++;
 
             System.out.println(current.getName());
         }
-        
-        System.out.println(foldersCount + " folders");
+
+        System.out.println(FOLDERS_COUNT + " folders");
     }
 
     public static void dfs(File file) {
-        foldersCount++;
+        FOLDERS_COUNT++;
 
         for (File f : Objects.requireNonNull(file.listFiles())) {
             if (f.isDirectory()) {
                 dfs(f);
             }
         }
+        
         System.out.println(file.getName());
     }
 }
