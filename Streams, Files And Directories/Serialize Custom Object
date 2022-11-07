@@ -1,0 +1,50 @@
+package Advanced;
+
+import java.io.*;
+
+public class SerializeCustomObject {
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+        Car car = new Car("Lada", "2107", 1985, 75);
+
+        String path = "C:/Users/User/Desktop/my-text-output.txt";
+
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+
+        outputStream.writeObject(car);
+        outputStream.close();
+
+        FileInputStream fileInputStream = new FileInputStream(path);
+        ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+
+        Car outputCar = (Car) inputStream.readObject();
+
+        System.out.println(outputCar);
+    }
+
+    public static class Car implements Serializable {
+        private String brand;
+        private String model;
+        private int year;
+        private int power;
+
+        public Car(String brand, String model, int year, int power) {
+            this.brand = brand;
+            this.model = model;
+            this.year = year;
+            this.power = power;
+        }
+
+        @Override
+        public String toString() {
+            return "Car{" +
+                    "brand='" + brand + '\'' +
+                    ", model='" + model + '\'' +
+                    ", year=" + year +
+                    ", power=" + power +
+                    '}';
+        }
+    }
+}
