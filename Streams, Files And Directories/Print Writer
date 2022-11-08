@@ -1,0 +1,35 @@
+package Advanced;
+
+import java.io.*;
+import java.util.*;
+
+public class PrintWriter {
+
+    public static void main(String[] args) throws IOException {
+
+        String inputPath = "C:\\Users\\User\\Desktop\\my-text-input.txt";
+
+        FileInputStream inputStream = new FileInputStream(inputPath);
+
+        Scanner scanner = new Scanner(inputStream);
+
+        String outputPath = "C:\\Users\\User\\Desktop\\my-text-output.txt";
+
+        FileOutputStream outputStream = new FileOutputStream(outputPath);
+
+        PrintWriter writer = new PrintWriter(outputStream);
+
+        while (scanner.hasNext()) {
+
+            if (scanner.hasNextInt()) {
+                int number = scanner.nextInt();
+                writer.println(number);
+            }
+
+            scanner.next();
+        }
+
+        writer.flush();
+        writer.close();
+    }
+}
