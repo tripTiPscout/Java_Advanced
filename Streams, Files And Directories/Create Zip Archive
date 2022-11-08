@@ -1,0 +1,51 @@
+package Advanced;
+
+import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+public class CreateZipArchive {
+
+    private static final String FIRST_FILE_PATH = "C:/Users/User/Desktop/my-text-input.txt";
+    private static final String ZIP_FILE_PATH = "C:/Users/User/Desktop/my-text-file.zip";
+
+    public static void main(String[] args) {
+
+        try {
+
+            FileOutputStream fileOutputStream = new FileOutputStream(ZIP_FILE_PATH);
+
+            ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+
+            File file = new File(FIRST_FILE_PATH);
+
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            String[] tokens = FIRST_FILE_PATH.split("/");
+
+            String fileName = tokens[tokens.length - 1];
+
+            ZipEntry zipEntry = new ZipEntry(fileName);
+
+            zipOutputStream.putNextEntry(zipEntry);
+
+            byte[] bytes = new byte[1024];
+
+            int length;
+
+            while ((length = fileInputStream.read(bytes)) >= 0) {
+
+                zipOutputStream.write(bytes, 0, length);
+            }
+
+            zipOutputStream.close();
+            fileInputStream.close();
+
+        } catch (IOException exception) {
+
+            exception.getStackTrace();
+        }
+
+    }
+
+}
