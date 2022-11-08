@@ -1,0 +1,36 @@
+package Advanced;
+
+import java.io.*;
+
+public class WriteToFile {
+
+    public static void main(String[] args) throws IOException {
+
+        String inputPath = "C:\\Users\\User\\Desktop\\my-text-input.txt";
+
+        FileInputStream inputStream = new FileInputStream(inputPath);
+
+        String outputPath = "C:\\Users\\User\\Desktop\\my-text-output.txt";
+
+        FileOutputStream outputStream = new FileOutputStream(outputPath);
+
+        PrintWriter writer = new PrintWriter(outputStream);
+
+        int singleByte = inputStream.read();
+
+        while (singleByte >= 0) {
+
+            char symbol = (char) singleByte;
+
+            writer.print(symbol);
+
+            singleByte = inputStream.read();
+        }
+
+        writer.close();
+
+        inputStream.close();
+
+        outputStream.close();
+    }
+}
