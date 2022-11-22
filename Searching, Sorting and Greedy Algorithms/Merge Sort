@@ -14,12 +14,7 @@ public class MergeSort {
 
         sort(arr);
 
-        StringBuilder builder = new StringBuilder();
-
-        for (int number : arr) {
-            builder.append(number).append(" ");
-        }
-        System.out.println(builder);
+        printSortedArray(arr);
     }
 
     private static void sort(int[] arr) {
@@ -60,6 +55,15 @@ public class MergeSort {
                 arr[i] = helper[right++];
             }
         }
+    }
+
+    private static void printSortedArray(int[] arr) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int number : arr) {
+            builder.append(number).append(" ");
+        }
+        System.out.println(builder);
     }
 
 }
