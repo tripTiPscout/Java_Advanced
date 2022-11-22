@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Quicksort {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -12,11 +11,9 @@ public class Quicksort {
                 .mapToInt(Integer::parseInt)
                 .toArray();
 
-        sort(numbers, 0, numbers.length - 1);   //O(n2)
+        sort(numbers, 0, numbers.length - 1);
 
-        for (int number : numbers) {
-            System.out.print(number + " ");
-        }
+        printSortedArray(numbers);
     }
 
     static void sort(int[] array, int startIndex, int endIndex) {
@@ -45,6 +42,12 @@ public class Quicksort {
         array[endIndex] = temp;
 
         return i + 1;
+    }
+
+    private static void printSortedArray(int[] numbers) {
+        for (int number : numbers) {
+            System.out.print(number + " ");
+        }
     }
 
 }
