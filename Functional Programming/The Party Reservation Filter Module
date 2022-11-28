@@ -1,0 +1,71 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+public class ThePartyReservationFilterModule {
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        if (input.length() == 0) {
+            return;
+        }
+
+        List<String> names = Arrays.stream(input.split("\\s+")).collect(Collectors.toList());
+        List<String> commandLines = new ArrayList<>();
+
+        String inputLine = scanner.nextLine();
+
+        while (!inputLine.equals("Print")) {
+            String[] lineParts = inputLine.split(";");
+            
+            String command = lineParts[0];
+            String variant = lineParts[1];
+            String filter = lineParts[2];
+
+            if (command.equals("Add filter")) {
+                commandLines.add(inputLine);
+            } else if (command.equals("Remove filter")) {
+                String commandToRemove = "Add filter;" + variant + ";" + filter;
+                commandLines.removeIf(s -> s.equals(commandToRemove));
+            }
+            inputLine = scanner.nextLine();
+        }
+
+        for (String command : commandLines) {
+            String[] lineParts = command.split(";");
+            
+            String type = lineParts[1];
+            String filter = lineParts[2];
+
+            Predicate<String> startsWith = name -> name.startsWith(filter);
+            Predicate<String> endsWith = name -> name.endsWith(filter);
+            Predicate<String> validLength = name -> name.length() == Integer.parseInt(filter);
+            Predicate<String> containsLetter = name -> name.contains(filter);
+
+            switch (type) {
+                case "Starts with":
+                    names.removeIf(startsWith);
+                    break;
+                case "Ends with":
+                    names.removeIf(endsWith);
+                    break;
+                case "Length":
+                    names.removeIf(validLength);
+                    break;
+                case "Contains":
+                    names.removeIf(containsLetter);
+                    break;
+            }
+        }
+        System.out.println(String.join(" ", names));
+    }
+
+}
