@@ -1,0 +1,161 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class RawData {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Car> cars = new ArrayList<>();
+
+        listInputCars(scanner, cars);
+
+        printSpecificCargoTypeCars(scanner, cars);
+    }
+
+    private static void printSpecificCargoTypeCars(Scanner scanner, List<Car> cars) {
+        String cargoType = scanner.nextLine();
+
+        for (Car car : cars) {
+            if (cargoType.equals("fragile")
+                    && car.getCargo().getType().equals("fragile")
+                    && car.isTirePressureLessThanOne()) {
+
+                System.out.println(car);
+
+            } else if (cargoType.equals("flamable")
+                    && car.getCargo().getType().equals("flamable")
+                    && car.getEngine().getPower() > 250) {
+
+                System.out.println(car);
+            }
+        }
+    }
+
+    private static void extractTireData(String[] inputCarData, Tire[] tires, int pressureDataIndex, int tireAgeIndex, int tireIndex) {
+        double tirePressure = Double.parseDouble(inputCarData[pressureDataIndex]);
+        int tireAge = Integer.parseInt(inputCarData[tireAgeIndex]);
+        tires[tireIndex] = new Tire(tirePressure, tireAge);
+    }
+
+    private static void listInputCars(Scanner scanner, List<Car> cars) {
+        int carsCount = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= carsCount; i++) {
+            String[] inputCarData = scanner.nextLine().split("\\s+");
+
+            String model = inputCarData[0];
+
+            int engineSpeed = Integer.parseInt(inputCarData[1]);
+            int enginePower = Integer.parseInt(inputCarData[2]);
+            Engine engine = new Engine(engineSpeed, enginePower);
+
+            int cargoWeight = Integer.parseInt(inputCarData[3]);
+            String cargoType = inputCarData[4];
+            Cargo cargo = new Cargo(cargoWeight, cargoType);
+
+            Tire[] tires = new Tire[4];
+
+            extractTireData(inputCarData, tires, 5, 6, 0);
+
+            extractTireData(inputCarData, tires, 7, 8, 1);
+
+            extractTireData(inputCarData, tires, 9, 10, 2);
+
+            extractTireData(inputCarData, tires, 11, 12, 3);
+
+            Car newCar = new Car(model, engine, cargo, tires);
+            cars.add(newCar);
+        }
+    }
+
+}
+
+class Car {
+
+    private String model;
+    private Engine engine;
+    private Cargo cargo;
+    private Tire[] tires;
+
+    public Car(String model, Engine engine, Cargo cargo, Tire[] tires) {
+        this.model = model;
+        this.engine = engine;
+        this.cargo = cargo;
+        this.tires = tires;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public boolean isTirePressureLessThanOne() {
+        for (Tire tire : tires) {
+            if (tire.getPressure() < 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s", model);
+    }
+
+}
+
+class Engine {
+
+    private int speed;
+    private int power;
+
+    public Engine(int speed, int power) {
+        this.speed = speed;
+        this.power = power;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+}
+
+class Cargo {
+
+    private int weight;
+    private String type;
+
+    public Cargo(int weight, String type) {
+        this.weight = weight;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+}
+
+class Tire {
+
+    private double pressure;
+    private int age;
+
+    public Tire(double pressure, int age) {
+        this.pressure = pressure;
+        this.age = age;
+    }
+
+    public double getPressure() {
+        return pressure;
+    }
+
+}
