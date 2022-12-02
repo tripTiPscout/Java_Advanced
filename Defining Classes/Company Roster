@@ -1,0 +1,179 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class CompanyRoster {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Employee> employees = new ArrayList<>();
+
+        List<Department> departments = new ArrayList<>();
+
+        fillEmployeeList(scanner, employees);
+
+        fillDepartmentList(employees, departments);
+
+        Department highestSalaryDepartment = getHighestSalaryDepartment(departments);
+
+        printDepartmentAndEmployees(highestSalaryDepartment);
+    }
+
+    private static Department getHighestSalaryDepartment(List<Department> departments) {
+        departments
+                .sort(Comparator.comparingDouble(Department::getAverageSalary)
+                        .reversed());
+
+        Department highestSalaryDepartment = departments.get(0);
+
+        highestSalaryDepartment.getEmployees()
+                .sort(Comparator.comparingDouble(Employee::getSalary)
+                        .reversed());
+
+        return highestSalaryDepartment;
+    }
+
+    private static void fillDepartmentList(List<Employee> employees, List<Department> departments) {
+        List<String> departmentsList = employees.stream()
+                .map(Employee::getDepartment)
+                .distinct()
+                .collect(Collectors.toList());
+
+        for (String department : departmentsList) {
+            departments.add(new Department(department, employees.stream()
+                    .filter(employee -> employee.getDepartment()
+                            .equals(department))
+                    .collect(Collectors.toList())));
+        }
+    }
+
+    private static void printDepartmentAndEmployees(Department department) {
+        System.out.printf("Highest Average Salary: %s\n", department.getName());
+        for (Employee employee : department.getEmployees()) {
+            System.out.print(employee);
+        }
+    }
+
+    private static void fillEmployeeList(Scanner scanner, List<Employee> employees) {
+        int lines = Integer.parseInt(scanner.nextLine());
+        
+        for (int i = 1; i <= lines; i++) {
+            String[] inputData = scanner.nextLine().split("\\s+");
+
+            String employeeName = inputData[0];
+            double employeeSalary = Double.parseDouble(inputData[1]);
+            String employeePosition = inputData[2];
+            String departmentName = inputData[3];
+            String employeeMail;
+            int employeeAge;
+
+            Employee newEmployee = null;
+
+            if (inputData.length == 4) {
+                newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName);
+            } else if (inputData.length == 5) {
+                if (isAge(inputData[4])) {
+                    employeeAge = Integer.parseInt(inputData[4]);
+                    newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeAge);
+                } else {
+                    employeeMail = inputData[4];
+                    newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeMail);
+                }
+            } else if (inputData.length == 6) {
+                employeeMail = inputData[4];
+                employeeAge = Integer.parseInt(inputData[5]);
+                newEmployee = new Employee(employeeName, employeeSalary, employeePosition, departmentName, employeeMail, employeeAge);
+            }
+
+            employees.add(newEmployee);
+        }
+    }
+
+    public static boolean isAge(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+}
+
+class Employee {
+
+    private String name;
+    private double salary;
+    private String position;
+    private String department;
+    private String mail;
+    private int age;
+
+    public Employee(String name, double salary, String position, String department, String mail, int age) {
+        this.name = name;
+        this.salary = salary;
+        this.position = position;
+        this.department = department;
+        this.mail = mail;
+        this.age = age;
+    }
+
+    public Employee(String name, double salary, String position, String department) {
+        this(name, salary, position, department, "n/a", -1);
+    }
+
+    public Employee(String name, double salary, String position, String department, String mail) {
+        this(name, salary, position, department, mail, -1);
+    }
+
+    public Employee(String name, double salary, String position, String department, int age) {
+        this(name, salary, position, department, "n/a", age);
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %.2f %s %d\n", name, salary, mail, age);
+    }
+
+}
+
+class Department {
+
+    private String name;
+    private List<Employee> employees;
+
+    public Department(String name, List<Employee> employees) {
+        this.name = name;
+        this.employees = employees;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public double getAverageSalary() {
+        return calcAverageSalary(getEmployees());
+    }
+
+    public double calcAverageSalary(List<Employee> employees) {
+        return employees.stream().mapToDouble(Employee::getSalary).average().orElse(0.00);
+    }
+
+}
