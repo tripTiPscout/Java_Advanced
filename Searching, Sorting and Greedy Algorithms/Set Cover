@@ -81,8 +81,8 @@ public class SetCover {
                 }
             }
             selectedSets.add(chosenSet);
-            for (int el : chosenSet) {
-                universeSet.remove(el);
+            for (int element : chosenSet) {
+                universeSet.remove(element);
             }
         }
         return selectedSets;
