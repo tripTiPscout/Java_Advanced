@@ -1,0 +1,51 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] firstLineInput = scanner.nextLine().split("\\s+");
+        String fullName = String.format("%s %s", firstLineInput[0], firstLineInput[1]);
+        String address = firstLineInput[2];
+        String town = firstLineInput[3];
+        Threeuple<String, String, String> nameAndAddress = new Threeuple<>(fullName, address, town);
+        System.out.println(nameAndAddress);
+
+        String[] secondLineInput = scanner.nextLine().split("\\s+");
+        String name = secondLineInput[0];
+        int littersBeer = Integer.parseInt(secondLineInput[1]);
+        boolean isDrunk = secondLineInput[2].equals("drunk");
+        Threeuple<String, Integer, Boolean> nameAndLittersBeer = new Threeuple<>(name, littersBeer, isDrunk);
+        System.out.println(nameAndLittersBeer);
+
+        String[] thirdLineInput = scanner.nextLine().split("\\s+");
+        String customerName = thirdLineInput[0];
+        double number = Double.parseDouble(thirdLineInput[1]);
+        String bankName = thirdLineInput[2];
+        Threeuple<String, Double, String> intAndDouble = new Threeuple<>(customerName, number, bankName);
+        System.out.println(intAndDouble);
+
+    }
+}
+
+class Threeuple<T, E, V> {
+
+    private final T firstElement;
+    private final E secondElement;
+    private final V thirdElement;
+
+    public Threeuple(T firstElement, E secondElement, V thirdElement) {
+        this.firstElement = firstElement;
+        this.secondElement = secondElement;
+        this.thirdElement = thirdElement;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s -> %s -> %s", this.firstElement, this.secondElement, this.thirdElement);
+    }
+
+}
