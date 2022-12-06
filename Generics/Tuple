@@ -1,0 +1,46 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] firstLineInput = scanner.nextLine().split("\\s+");
+        String fullName = String.format("%s %s", firstLineInput[0], firstLineInput[1]);
+        String address = firstLineInput[2];
+        Tuple<String, String> nameAndAddress = new Tuple<>(fullName, address);
+        System.out.println(nameAndAddress);
+
+        String[] secondLineInput = scanner.nextLine().split("\\s+");
+        String name = secondLineInput[0];
+        int littersBeer = Integer.parseInt(secondLineInput[1]);
+        Tuple<String, Integer> nameAndLittersBeer = new Tuple<>(name, littersBeer);
+        System.out.println(nameAndLittersBeer);
+
+        String[] thirdLineInput = scanner.nextLine().split("\\s+");
+        int num = Integer.parseInt(thirdLineInput[0]);
+        double number = Double.parseDouble(thirdLineInput[1]);
+        Tuple<Integer, Double> intAndDouble = new Tuple<>(num, number);
+        System.out.println(intAndDouble);
+
+    }
+}
+
+class Tuple<T, E> {
+
+    private final T firstElement;
+    private final E secondElement;
+
+    public Tuple(T firstElement, E secondElement) {
+        this.firstElement = firstElement;
+        this.secondElement = secondElement;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s -> %s", this.firstElement, this.secondElement);
+    }
+
+}
