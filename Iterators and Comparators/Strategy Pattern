@@ -1,6 +1,10 @@
 package Advanced;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Main {
 
@@ -23,12 +27,12 @@ public class Main {
 
         peopleByName.forEach(System.out::println);
         peopleByAge.forEach(System.out::println);
-
     }
+    
 }
 
 class Person {
-    private String name;
+    private final String name;
     private int age;
 
     public Person(String name, int age) {
