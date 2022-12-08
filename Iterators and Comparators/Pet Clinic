@@ -26,12 +26,14 @@ public class Main {
                         String petName = inputData[2];
                         int petAge = Integer.parseInt(inputData[3]);
                         String petKind = inputData[4];
+                        
                         Pet newPet = new Pet(petName, petAge, petKind);
                         pets.putIfAbsent(petName, newPet);
                     } else {
                         try {
                             String clinicName = inputData[2];
                             int clinicRoomsCount = Integer.parseInt(inputData[3]);
+                            
                             Clinic newClinic = new Clinic(clinicName, clinicRoomsCount);
                             clinics.putIfAbsent(clinicName, newClinic);
                         } catch (IllegalArgumentException exception) {
@@ -42,21 +44,25 @@ public class Main {
                 case "Add":
                     String petName = inputData[1];
                     String clinicToAddName = inputData[2];
+                    
                     Pet pet = pets.get(petName);
                     Clinic clinicToAdd = clinics.get(clinicToAddName);
                     System.out.println(clinicToAdd.addPet(pet));
                     break;
                 case "Release":
                     String clinicToReleaseName = inputData[1];
+                    
                     Clinic clinicToRelease = clinics.get(clinicToReleaseName);
                     System.out.println(clinicToRelease.release());
                     break;
                 case "HasEmptyRooms":
                     String emptyClinicName = inputData[1];
+                    
                     System.out.println(clinics.get(emptyClinicName).hasEmptyRooms());
                     break;
                 case "Print":
                     String clinicToPrintName = inputData[1];
+                    
                     Clinic clinicToPrint = clinics.get(clinicToPrintName);
                     if (inputData.length == 2) {
                         for (Pet currentPet : clinicToPrint.getPets()) {
@@ -68,6 +74,7 @@ public class Main {
                         }
                     } else if (inputData.length == 3) {
                         int room = Integer.parseInt(inputData[2]);
+                        
                         clinicToPrint.printClinicRoomInfo(room);
                     }
                     break;
@@ -78,9 +85,9 @@ public class Main {
 }
 
 class Pet {
-    private String name;
-    private int age;
-    private String kind;
+    private final String name;
+    private final int age;
+    private final String kind;
 
     public Pet(String name, int age, String kind) {
         this.name = name;
@@ -95,7 +102,7 @@ class Pet {
 }
 
 class Clinic implements Iterable<Pet> {
-    private String name;
+    private final String name;
     private Pet[] pets;
 
     public Clinic(String name, int roomsCount) {
