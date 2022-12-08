@@ -1,0 +1,186 @@
+package Advanced;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Iterator;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Pet> pets = new HashMap<>();
+        Map<String, Clinic> clinics = new HashMap<>();
+
+        int inputLines = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= inputLines; i++) {
+            String[] inputData = scanner.nextLine().split("\\s+");
+            String command = inputData[0];
+
+            switch (command) {
+                case "Create":
+                    String petOrClinic = inputData[1];
+                    if (petOrClinic.equals("Pet")) {
+                        String petName = inputData[2];
+                        int petAge = Integer.parseInt(inputData[3]);
+                        String petKind = inputData[4];
+                        Pet newPet = new Pet(petName, petAge, petKind);
+                        pets.putIfAbsent(petName, newPet);
+                    } else {
+                        try {
+                            String clinicName = inputData[2];
+                            int clinicRoomsCount = Integer.parseInt(inputData[3]);
+                            Clinic newClinic = new Clinic(clinicName, clinicRoomsCount);
+                            clinics.putIfAbsent(clinicName, newClinic);
+                        } catch (IllegalArgumentException exception) {
+                            System.out.println(exception.getMessage());
+                        }
+                    }
+                    break;
+                case "Add":
+                    String petName = inputData[1];
+                    String clinicToAddName = inputData[2];
+                    Pet pet = pets.get(petName);
+                    Clinic clinicToAdd = clinics.get(clinicToAddName);
+                    System.out.println(clinicToAdd.addPet(pet));
+                    break;
+                case "Release":
+                    String clinicToReleaseName = inputData[1];
+                    Clinic clinicToRelease = clinics.get(clinicToReleaseName);
+                    System.out.println(clinicToRelease.release());
+                    break;
+                case "HasEmptyRooms":
+                    String emptyClinicName = inputData[1];
+                    System.out.println(clinics.get(emptyClinicName).hasEmptyRooms());
+                    break;
+                case "Print":
+                    String clinicToPrintName = inputData[1];
+                    Clinic clinicToPrint = clinics.get(clinicToPrintName);
+                    if (inputData.length == 2) {
+                        for (Pet currentPet : clinicToPrint.getPets()) {
+                            if (currentPet == null) {
+                                System.out.println("Room empty");
+                            } else {
+                                System.out.println(currentPet);
+                            }
+                        }
+                    } else if (inputData.length == 3) {
+                        int room = Integer.parseInt(inputData[2]);
+                        clinicToPrint.printClinicRoomInfo(room);
+                    }
+                    break;
+            }
+        }
+    }
+
+}
+
+class Pet {
+    private String name;
+    private int age;
+    private String kind;
+
+    public Pet(String name, int age, String kind) {
+        this.name = name;
+        this.age = age;
+        this.kind = kind;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %d %s", name, age, kind);
+    }
+}
+
+class Clinic implements Iterable<Pet> {
+    private String name;
+    private Pet[] pets;
+
+    public Clinic(String name, int roomsCount) {
+        this.name = name;
+        setRoom(roomsCount);
+    }
+
+    public Pet[] getPets() {
+        return pets;
+    }
+
+    private void setRoom(int roomsCount) {
+        if (roomsCount % 2 == 0) {
+            throw new IllegalArgumentException("invalid Operation!");
+        }
+        this.pets = new Pet[roomsCount];
+    }
+
+    public boolean addPet(Pet pet) {
+        int rooms = this.pets.length / 2;
+        for (int i = 0; i < this.pets.length; i++) {
+            if (i % 2 == 0) {
+                rooms += i;
+            } else {
+                rooms -= i;
+            }
+            if (this.pets[rooms] == null) {
+                this.pets[rooms] = pet;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean release() {
+        int start = this.pets.length / 2;
+        for (int i = start; i < this.pets.length; i++) {
+            if (isPetExist(i)) return true;
+        }
+        for (int i = 0; i < start; i++) {
+            if (isPetExist(i)) return true;
+        }
+        return false;
+    }
+
+    private boolean isPetExist(int i) {
+        if (this.pets[i] != null) {
+            this.pets[i] = null;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasEmptyRooms() {
+        for (Pet pet : pets) {
+            if (pet == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void printClinicRoomInfo(int room) {
+        if (pets[room - 1] == null) {
+            System.out.println("Room empty");
+        } else {
+            System.out.println(pets[room - 1]);
+        }
+    }
+
+    @Override
+    public Iterator<Pet> iterator() {
+        return new Iterator<>() {
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < pets.length;
+            }
+
+            @Override
+            public Pet next() {
+                return pets[index++];
+            }
+        };
+    }
+
+}
