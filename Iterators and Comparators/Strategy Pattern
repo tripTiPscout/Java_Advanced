@@ -1,0 +1,79 @@
+package Advanced;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Set<Person> peopleByName = new TreeSet<>(new PersonComparatorByName());
+        Set<Person> peopleByAge = new TreeSet<>(new PersonComparatorByAge());
+
+        int inputLines = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= inputLines; i++) {
+            String[] personData = scanner.nextLine().trim().split("\\s+");
+            String name = personData[0];
+            int age = Integer.parseInt(personData[1]);
+            Person newPerson = new Person(name, age);
+            peopleByName.add(newPerson);
+            peopleByAge.add(newPerson);
+        }
+
+        peopleByName.forEach(System.out::println);
+        peopleByAge.forEach(System.out::println);
+
+    }
+}
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        setAge(age);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        if (age < 0) {
+            throw new IllegalStateException("Age can not be negative number!");
+        }
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %d", getName(), getAge());
+    }
+}
+
+class PersonComparatorByName implements Comparator<Person> {
+    @Override
+    public int compare(Person person1, Person person2) {
+        int result = person1.getName().length() - person2.getName().length();
+
+        if (result == 0) {
+            char p1FirstLetter = person1.getName().toLowerCase(Locale.ROOT).charAt(0);
+            char p2FirstLetter = person2.getName().toLowerCase(Locale.ROOT).charAt(0);
+            return p1FirstLetter - p2FirstLetter;
+        }
+        return result;
+    }
+}
+
+class PersonComparatorByAge implements Comparator<Person> {
+    @Override
+    public int compare(Person person1, Person person2) {
+        return Integer.compare(person1.getAge(), person2.getAge());
+    }
+}
