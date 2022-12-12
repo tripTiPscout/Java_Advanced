@@ -1,0 +1,92 @@
+package Advanced;
+
+import java.util.Iterator;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Book book1 = new Book("The Programmer", 1984);
+        Book book2 = new Book("Killer life", 1842, "Peter Pan", "Milos Price");
+        Book book3 = new Book("Madagascar", 1755, "Nikol");
+
+        Library library = new Library(book1, book2, book3);
+
+        for (Book book : library) {
+            System.out.println(book);
+        }
+
+        library.forEach(System.out::println);
+    }
+
+}
+
+class Book {
+
+    private String title;
+    private int year;
+    private List<String> authors;
+
+    public Book(String title, int year, String... authors) {
+        setTitle(title);
+        setYear(year);
+        setAuthors(authors);
+    }
+
+    private void setTitle(String title) {
+        this.title = title;
+    }
+
+    private void setYear(int year) {
+        this.year = year;
+    }
+
+    private void setAuthors(String[] authors) {
+        this.authors = List.of(authors);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", year=" + year +
+                ", authors=" + authors +
+                '}';
+    }
+}
+
+class Library implements Iterable<Book> {
+
+    private class LibraryIterator implements Iterator<Book> {
+
+        private int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < books.length;
+        }
+
+        @Override
+        public Book next() {
+            return books[index++];
+        }
+
+    }
+
+    private Book[] books;
+
+    public Library(Book... books) {
+        setBooks(books);
+    }
+
+    public void setBooks(Book[] books) {
+        this.books = books;
+    }
+
+    @Override
+    public Iterator<Book> iterator() {
+        return new LibraryIterator();
+    }
+    
+}
