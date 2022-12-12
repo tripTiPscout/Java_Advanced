@@ -1,0 +1,95 @@
+package Advanced;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        CustomStack<Integer> customStack = new CustomStack<>();
+
+        String inputLine = scanner.nextLine();
+
+        int[] values = Arrays.stream(inputLine.substring(4).trim().split(", "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        for (int value : values) {
+            customStack.push(value);
+        }
+
+        while (!"END".equals(inputLine = scanner.nextLine())) {
+            if (inputLine.equals("Pop")) {
+                try {
+                    customStack.pop();
+                } catch (IllegalStateException exception) {
+                    System.out.println(exception.getMessage());
+                }
+            } else {
+                String elementToPush = inputLine.split("\\s+")[1];
+                customStack.push(Integer.parseInt(elementToPush));
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            for (Object element : customStack) {
+                System.out.println(element);
+            }
+        }
+    }
+
+}
+
+class CustomStack<E> implements Iterable<E> {
+
+    private Node topElement;
+
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<>() {
+            private Node currentNode = topElement;
+
+            @Override
+            public boolean hasNext() {
+                return currentNode != null;
+            }
+
+            @Override
+            public E next() {
+                E element = currentNode.element;
+                currentNode = currentNode.prev;
+                return element;
+            }
+        };
+    }
+
+    private class Node {
+        private final E element;
+        private Node prev;
+
+        public Node(E element) {
+            this.element = element;
+        }
+    }
+
+    public void push(E element) {
+        Node newNode = new Node(element);
+        if (this.topElement != null) {
+            newNode.prev = this.topElement;
+        }
+        this.topElement = newNode;
+    }
+
+    public E pop() {
+        if (this.topElement == null) {
+            throw new IllegalStateException("No elements");
+        }
+        E poppedElement = this.topElement.element;
+        this.topElement = this.topElement.prev;
+        return poppedElement;
+    }
+    
+}
