@@ -1,0 +1,110 @@
+package Advanced;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> elements = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .skip(1)
+                .collect(Collectors.toList());
+
+        ListIterator<String> listIterator = new ListIterator<>(elements);
+
+        String input;
+
+        while (!"END".equals(input = scanner.nextLine())) {
+            switch (input) {
+                case "HasNext":
+                    System.out.println(listIterator.iterator().hasNext());
+                    break;
+                case "Move":
+                    System.out.println(listIterator.move());
+                    break;
+                case "Print":
+                    try {
+                        listIterator.print();
+                    } catch (IllegalStateException exception) {
+                        System.out.println(exception.getMessage());
+                    }
+                    break;
+                case "PrintAll":
+                    try {
+                        listIterator.printAll();
+                    } catch (IllegalStateException exception) {
+                        System.out.println(exception.getMessage());
+                    }
+                    break;
+            }
+        }
+    }
+
+}
+
+class ListIterator<T> implements Iterable<T> {
+
+    private final List<T> elements;
+    private int index;
+
+    public ListIterator(List<T> elements) {
+        this.elements = elements;
+    }
+
+    public boolean hasNext() {
+        return index < elements.size() - 1;
+    }
+
+    public boolean move() {
+        if (iterator().hasNext()) {
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    public void print() {
+        validatePrint();
+        System.out.println(this.elements.get(this.index));
+    }
+
+    public void printAll() {
+        validatePrint();
+        this.elements.forEach(e -> System.out.print(e +" "));
+        System.out.println();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> consumer) {
+        this.elements.forEach(consumer);
+    }
+
+    public void validatePrint() {
+        if (this.elements.isEmpty()) {
+            throw new IllegalStateException("Invalid operation!");
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return index < elements.size() - 1;
+            }
+
+            @Override
+            public T next() {
+                T element = elements.get(index);
+                index++;
+                return element;
+            }
+        };
+    }
+}
