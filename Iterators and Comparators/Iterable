@@ -57,10 +57,6 @@ class ListIterator<T> implements Iterable<T> {
         this.elements = elements;
     }
 
-    public boolean hasNext() {
-        return index < elements.size() - 1;
-    }
-
     public boolean move() {
         if (iterator().hasNext()) {
             index++;
@@ -78,11 +74,6 @@ class ListIterator<T> implements Iterable<T> {
         validatePrint();
         this.elements.forEach(e -> System.out.print(e +" "));
         System.out.println();
-    }
-
-    @Override
-    public void forEach(Consumer<? super T> consumer) {
-        this.elements.forEach(consumer);
     }
 
     public void validatePrint() {
@@ -107,4 +98,5 @@ class ListIterator<T> implements Iterable<T> {
             }
         };
     }
+    
 }
